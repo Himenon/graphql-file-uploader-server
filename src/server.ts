@@ -34,6 +34,7 @@ const root = {
   Upload: GraphQLUpload,
   Mutation: {
     singleUpload: (parent: any, args: any) => {
+      console.log(args);
       return args.file.then((file) => {
         console.log(`📁 File get ${file.filename}`);
         return file;
@@ -44,21 +45,19 @@ const root = {
 
 app.use(cors());
 
-app.use(
-  graphqlUploadExpress({
-    maxFileSize: 100 * 1024 * 1024,
-    maxFiles: 5,
-  })
-);
-
 // Create and use the GraphQL handler.
 app.all(
   "/graphql",
+  graphqlUploadExpress({
+    maxFileSize: 100 * 1024 * 1024,
+    maxFiles: 5,
+  }),
   createHandler({
     schema: schema,
     rootValue: root,
   })
 );
+
 app.listen(PORT, () => {
   console.log(`Express server listening on port ${PORT}`);
 });

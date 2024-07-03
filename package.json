@@ -43,6 +43,7 @@
     "README.md"
   ],
   "scripts": {
+    "start": "pnpm run ts ./src/server.ts",
     "build": "tsup src/*.ts",
     "clean": "rimraf dist",
     "lerna:version:up": "lerna version --yes",
@@ -92,6 +93,8 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "graphql": "^16.9.0",
+    "graphql-http": "^1.22.1"
   }
 }

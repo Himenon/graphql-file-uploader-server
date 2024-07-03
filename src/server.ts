@@ -4,8 +4,11 @@ import { createHandler } from "graphql-http/lib/use/express";
 import { buildSchema } from "graphql";
 import graphqlUploadExpress from "graphql-upload/graphqlUploadExpress.mjs";
 import GraphQLUpload, { FileUpload } from "graphql-upload/GraphQLUpload.mjs";
+import * as fs from "fs";
 
 const PORT = 8000;
+
+fs.mkdirSync("output");
 
 const schema = buildSchema(`
   """
@@ -32,11 +35,28 @@ const app = express();
 
 const root = {
   Upload: GraphQLUpload,
-  singleUpload: (args: any, parent: any) => {
-    console.log({ parent, args });
-    console.log(typeof args);
-    console.log(args.upload.file);
-    return args.upload.file;
+  singleUpload: async (args: any, parent: any) => {
+    const upload = await (args.upload.file as Promise<FileUpload>);
+
+    console.log({
+      upload,
+    });
+    const readableStream = upload.createReadStream();
+
+    console.log({
+      readableStream,
+    });
+
+    const filename = `output/${upload.filename}`;
+    const writeStream = fs.createWriteStream(`output/${upload.filename}`);
+    readableStream.pipe(writeStream);
+    console.log(`Output: ${filename}`);
+
+    return new Promise((resolve) => {
+      writeStream.once("close", () => {
+        resolve(upload);
+      });
+    });
   },
 };
 

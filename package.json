@@ -43,7 +43,7 @@
     "README.md"
   ],
   "scripts": {
-    "start": "pnpm run ts ./src/server.ts",
+    "start": "nodemon",
     "build": "tsup src/*.ts",
     "clean": "rimraf dist",
     "lerna:version:up": "lerna version --yes",
@@ -55,6 +55,14 @@
     "validate": "biome check --apply .",
     "test:vitest": "vitest",
     "ts": "node --no-warnings=ExperimentalWarning --experimental-specifier-resolution=node --loader ts-node/esm"
+  },
+  "nodemonConfig": {
+    "delay": 600,
+    "exec": "pnpm run ts ./src/server.ts",
+    "ext": "ts",
+    "watch": [
+      "src/**"
+    ]
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged"
@@ -69,6 +77,7 @@
     "@swc/core": "^1.4.11",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
+    "@types/graphql-upload": "^16.0.7",
     "@types/node": "20.12.2",
     "@typescript-eslint/eslint-plugin": "7.4.0",
     "@typescript-eslint/parser": "7.4.0",
@@ -76,6 +85,7 @@
     "cross-env": "^7.0.3",
     "lerna": "8.1.2",
     "lint-staged": "15.2.2",
+    "nodemon": "^3.1.4",
     "npm-run-all": "4.1.5",
     "rimraf": "^5.0.5",
     "simple-git-hooks": "^2.11.1",
@@ -95,6 +105,7 @@
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "graphql": "^16.9.0",
-    "graphql-http": "^1.22.1"
+    "graphql-http": "^1.22.1",
+    "graphql-upload": "^16.0.2"
   }
 }

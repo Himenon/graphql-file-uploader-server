@@ -2,24 +2,50 @@ import cors from "cors";
 import express from "express";
 import { createHandler } from "graphql-http/lib/use/express";
 import { buildSchema } from "graphql";
+import graphqlUploadExpress from "graphql-upload/graphqlUploadExpress.mjs";
+import GraphQLUpload from "graphql-upload/GraphQLUpload.mjs";
 
 const PORT = 8000;
 
 const schema = buildSchema(`
+  """
+  upload type
+  """
+  scalar Upload
+
+  type File {
+    filename: String!
+    mimetype: String!
+    encoding: String!
+  }
+
   type Query {
-    hello: String
+    uploads: [File]
+  }
+
+  type Mutation {
+    singleUpload(file: Upload!): File!
   }
 `);
 
 const app = express();
 
 const root = {
+  Upload: GraphQLUpload,
   hello() {
     return "Hello world!";
   },
 };
 
 app.use(cors());
+
+app.use(
+  graphqlUploadExpress({
+    maxFileSize: 100 * 1024 * 1024,
+    maxFiles: 5,
+  })
+);
+
 // Create and use the GraphQL handler.
 app.all(
   "/graphql",

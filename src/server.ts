@@ -3,7 +3,7 @@ import express from "express";
 import { createHandler } from "graphql-http/lib/use/express";
 import { buildSchema } from "graphql";
 import graphqlUploadExpress from "graphql-upload/graphqlUploadExpress.mjs";
-import GraphQLUpload from "graphql-upload/GraphQLUpload.mjs";
+import GraphQLUpload, { FileUpload } from "graphql-upload/GraphQLUpload.mjs";
 
 const PORT = 8000;
 
@@ -24,7 +24,7 @@ const schema = buildSchema(`
   }
 
   type Mutation {
-    singleUpload(file: Upload!): File!
+    singleUpload(upload: Upload!): File!
   }
 `);
 
@@ -32,14 +32,11 @@ const app = express();
 
 const root = {
   Upload: GraphQLUpload,
-  Mutation: {
-    singleUpload: (parent: any, args: any) => {
-      console.log(args);
-      return args.file.then((file) => {
-        console.log(`📁 File get ${file.filename}`);
-        return file;
-      });
-    },
+  singleUpload: (args: any, parent: any) => {
+    console.log({ parent, args });
+    console.log(typeof args);
+    console.log(args.upload.file);
+    return args.upload.file;
   },
 };
 
@@ -52,6 +49,19 @@ app.all(
     maxFileSize: 100 * 1024 * 1024,
     maxFiles: 5,
   }),
+  (req, res, next) => {
+    /**
+     * @see https://github.com/graphql/graphql-http/discussions/36
+     */
+    const contentType = req.headers?.["content-type"];
+    if (
+      typeof contentType === "string" &&
+      contentType.startsWith("multipart/form-data")
+    ) {
+      req.headers["content-type"] = "application/json";
+    }
+    next();
+  },
   createHandler({
     schema: schema,
     rootValue: root,

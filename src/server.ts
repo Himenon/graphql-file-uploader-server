@@ -32,8 +32,13 @@ const app = express();
 
 const root = {
   Upload: GraphQLUpload,
-  hello() {
-    return "Hello world!";
+  Mutation: {
+    singleUpload: (parent: any, args: any) => {
+      return args.file.then((file) => {
+        console.log(`📁 File get ${file.filename}`);
+        return file;
+      });
+    },
   },
 };
 

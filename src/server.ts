@@ -8,7 +8,7 @@ import * as fs from "fs";
 
 const PORT = 8000;
 
-fs.mkdirSync("output");
+fs.mkdirSync("output", { recursive: true });
 
 const schema = buildSchema(`
   """
@@ -37,15 +37,7 @@ const root = {
   Upload: GraphQLUpload,
   singleUpload: async (args: any, parent: any) => {
     const upload = await (args.upload.file as Promise<FileUpload>);
-
-    console.log({
-      upload,
-    });
     const readableStream = upload.createReadStream();
-
-    console.log({
-      readableStream,
-    });
 
     const filename = `output/${upload.filename}`;
     const writeStream = fs.createWriteStream(`output/${upload.filename}`);

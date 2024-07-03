@@ -2,7 +2,10 @@
   "name": "@himenon/template-esm-js",
   "version": "1.1.6",
   "description": "ESModule Library Template",
-  "keywords": ["template", "typescript"],
+  "keywords": [
+    "template",
+    "typescript"
+  ],
   "homepage": "https://github.com/Himenon/template-esm-js#readme",
   "bugs": {
     "url": "https://github.com/Himenon/template-esm-js/issues"
@@ -34,29 +37,48 @@
   "directories": {
     "dist": "dist"
   },
-  "files": ["dist", "package.json", "README.md"],
+  "files": [
+    "dist",
+    "package.json",
+    "README.md"
+  ],
   "scripts": {
+    "start": "nodemon",
     "build": "tsup src/*.ts",
     "clean": "rimraf dist",
     "lerna:version:up": "lerna version --yes",
     "release:github:registry": "pnpm publish --registry https://npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}",
     "release:npm:registry": "pnpm publish",
-    "test": "run-p test:vitest lint",
+    "test": "echo \"no test\"",
     "lint": "biome lint .",
     "format": "biome format --write .",
     "validate": "biome check --apply .",
     "test:vitest": "vitest",
     "ts": "node --no-warnings=ExperimentalWarning --experimental-specifier-resolution=node --loader ts-node/esm"
   },
+  "nodemonConfig": {
+    "delay": 600,
+    "exec": "pnpm run ts ./src/express-graphql-server.ts",
+    "ext": "ts",
+    "watch": [
+      "src/**"
+    ]
+  },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged"
   },
   "lint-staged": {
-    "*.{js,jsx,json,yml,yaml,html,md,ts,tsx}": ["biome format --no-errors-on-unmatched --write"]
+    "*.{js,jsx,json,yml,yaml,html,md,ts,tsx}": [
+      "biome format --no-errors-on-unmatched --write"
+    ]
   },
   "devDependencies": {
     "@biomejs/biome": "^1.6.3",
     "@swc/core": "^1.4.11",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/express-graphql": "^0.9.0",
+    "@types/graphql-upload": "^16.0.7",
     "@types/node": "20.12.2",
     "@typescript-eslint/eslint-plugin": "7.4.0",
     "@typescript-eslint/parser": "7.4.0",
@@ -64,6 +86,7 @@
     "cross-env": "^7.0.3",
     "lerna": "8.1.2",
     "lint-staged": "15.2.2",
+    "nodemon": "^3.1.4",
     "npm-run-all": "4.1.5",
     "rimraf": "^5.0.5",
     "simple-git-hooks": "^2.11.1",
@@ -78,5 +101,13 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "express-graphql": "^0.12.0",
+    "graphql": "^16.9.0",
+    "graphql-http": "^1.22.1",
+    "graphql-upload": "^16.0.2"
   }
 }

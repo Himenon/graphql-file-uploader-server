@@ -1,9 +1,5 @@
-# @himenon/template-esm-js
-
-## Release
-
-- Automatic version updates are performed when merged into the `main` branch.
+# @himenon/graphql-file-uploader-server
 
 ## LICENCE
 
-[@Himenon/template-esm-js](https://github.com/Himenon/template-esm-js)・MIT
+[@Himenon/graphql-file-uploader-server](https://github.com/Himenon/graphql-file-uploader-server)・MIT

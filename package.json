@@ -58,7 +58,7 @@
   },
   "nodemonConfig": {
     "delay": 600,
-    "exec": "pnpm run ts ./src/graphql-http-server.ts",
+    "exec": "pnpm run ts ./src/express-graphql-server.ts",
     "ext": "ts",
     "watch": [
       "src/**"

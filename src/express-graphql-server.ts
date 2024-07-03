@@ -1,6 +1,6 @@
 import cors from "cors";
 import express from "express";
-import { createHandler } from "graphql-http/lib/use/express";
+import { graphqlHTTP } from "express-graphql";
 import { buildSchema } from "graphql";
 import graphqlUploadExpress from "graphql-upload/graphqlUploadExpress.mjs";
 import GraphQLUpload, { FileUpload } from "graphql-upload/GraphQLUpload.mjs";
@@ -42,7 +42,7 @@ const root = {
     const filename = `output/${upload.filename}`;
     const writeStream = fs.createWriteStream(`output/${upload.filename}`);
     readableStream.pipe(writeStream);
-    console.log(`[graphql-http] Output: ${filename}`);
+    console.log(`[express-graphql] Output: ${filename}`);
 
     return new Promise((resolve) => {
       writeStream.once("close", () => {
@@ -74,7 +74,7 @@ app.all(
     }
     next();
   },
-  createHandler({
+  graphqlHTTP({
     schema: schema,
     rootValue: root,
   })

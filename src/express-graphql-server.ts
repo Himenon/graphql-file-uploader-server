@@ -61,19 +61,20 @@ app.all(
     maxFileSize: 100 * 1024 * 1024,
     maxFiles: 5,
   }),
-  (req, res, next) => {
-    /**
-     * @see https://github.com/graphql/graphql-http/discussions/36
-     */
-    const contentType = req.headers?.["content-type"];
-    if (
-      typeof contentType === "string" &&
-      contentType.startsWith("multipart/form-data")
-    ) {
-      req.headers["content-type"] = "application/json";
-    }
-    next();
-  },
+  // express-graphqlはなくても通る
+  // (req, res, next) => {
+  //   /**
+  //    * @see https://github.com/graphql/graphql-http/discussions/36
+  //    */
+  //   const contentType = req.headers?.["content-type"];
+  //   if (
+  //     typeof contentType === "string" &&
+  //     contentType.startsWith("multipart/form-data")
+  //   ) {
+  //     req.headers["content-type"] = "application/json";
+  //   }
+  //   next();
+  // },
   graphqlHTTP({
     schema: schema,
     rootValue: root,
